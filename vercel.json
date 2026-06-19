@@ -1,12 +1,13 @@
 {
-    "experimentalServices": {
-        "frontend": {
-            "routePrefix": "/",
-            "framework": "nextjs"
-        },
-        "backend": {
-            "root": "backend",
-            "routePrefix": "/_/backend"
-        }
+  "experimentalServices": {
+    "frontend": {
+      "routePrefix": "/",
+      "framework": "nextjs"
+    },
+    "backend": {
+      "root": "backend",
+      "routePrefix": "/_/backend",
+      "entrypoint": "api/index.js"
     }
+  }
 }

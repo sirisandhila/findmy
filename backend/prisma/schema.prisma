@@ -1,0 +1,219 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // Uncomment and set DIRECT_URL when using a connection pooler (pgBouncer / Supabase pooler)
+  // directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum CollegeType {
+  GOVERNMENT
+  PRIVATE
+  DEEMED
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  SHORTLISTED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  password     String
+  role         Role     @default(STUDENT)
+  profileImage String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  savedColleges SavedCollege[]
+  reviews       Review[]
+  applications  Application[]
+  searchLogs    SearchLog[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model College {
+  id                  String      @id @default(uuid())
+  name                String
+  shortName           String?
+  slug                String      @unique
+  description         String?
+  location            String
+  city                String
+  state               String
+  stream              String
+  ranking             Int?
+  rankingBody         String?
+  rating              Float       @default(0)
+  reviewCount         Int         @default(0)
+  fees                Int
+  feesLabel           String?
+  placementPercentage Float?
+  averagePackage      Float?
+  highestPackage      Float?
+  establishedYear     Int?
+  type                CollegeType @default(PRIVATE)
+  accreditation       String?
+  accredited          String?
+  website             String?
+  images              String[]    @default([])
+  image               String?
+  courseCount         Int         @default(0)
+  exams               String[]    @default([])
+  featured            Boolean     @default(false)
+  viewCount           Int         @default(0)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  courses      Course[]
+  reviews      Review[]
+  savedBy      SavedCollege[]
+  applications Application[]
+  collegeExams CollegeExam[]
+
+  @@index([state])
+  @@index([city])
+  @@index([stream])
+  @@index([type])
+  @@index([rating])
+  @@index([ranking])
+  @@index([fees])
+  @@index([featured])
+  @@index([viewCount])
+  @@index([createdAt])
+  @@map("colleges")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  collegeId   String
+  name        String
+  duration    String
+  fees        Int
+  eligibility String?
+  seats       Int?
+  stream      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId])
+  @@index([name])
+  @@index([stream])
+  @@map("courses")
+}
+
+model Exam {
+  id               String    @id @default(uuid())
+  name             String    @unique
+  slug             String    @unique
+  description      String?
+  examDate         DateTime?
+  registrationDate DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  collegeExams CollegeExam[]
+
+  @@map("exams")
+}
+
+model CollegeExam {
+  id        String @id @default(uuid())
+  collegeId String
+  examId    String
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@unique([collegeId, examId])
+  @@index([collegeId])
+  @@index([examId])
+  @@map("college_exams")
+}
+
+model SavedCollege {
+  id        String   @id @default(uuid())
+  userId    String
+  collegeId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@index([userId])
+  @@index([collegeId])
+  @@map("saved_colleges")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  collegeId String
+  rating    Float
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@index([collegeId])
+  @@index([userId])
+  @@index([rating])
+  @@map("reviews")
+}
+
+model Application {
+  id        String            @id @default(uuid())
+  userId    String
+  collegeId String
+  status    ApplicationStatus @default(PENDING)
+  appliedAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  notes     String?
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([collegeId])
+  @@index([status])
+  @@index([appliedAt])
+  @@map("applications")
+}
+
+model SearchLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  query     String
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([query])
+  @@index([createdAt])
+  @@index([userId])
+  @@map("search_logs")
+}

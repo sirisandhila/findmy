@@ -1,0 +1,329 @@
+{
+  "info": {
+    "name": "CollegeKampus API",
+    "_postman_id": "ck-api-collection-0001",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "collegeId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo Student\",\n  \"email\": \"demo@example.com\",\n  \"password\": \"Password@123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@collegekampus.com\",\n  \"password\": \"Student@12345\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/refresh",
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" }
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/auth/me"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Colleges",
+      "item": [
+        {
+          "name": "List Colleges (search/filter/sort/paginate)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/colleges?q=engineering&state=Delhi,Karnataka&type=GOVERNMENT&maxFees=1000000&minRating=4&sort=rating&page=1&pageSize=10"
+          }
+        },
+        {
+          "name": "Get College by id/slug",
+          "request": { "method": "GET", "url": "{{baseUrl}}/colleges/{{collegeId}}" }
+        },
+        {
+          "name": "Trending Colleges",
+          "request": { "method": "GET", "url": "{{baseUrl}}/colleges/trending?limit=10" }
+        },
+        {
+          "name": "Compare Colleges",
+          "request": { "method": "GET", "url": "{{baseUrl}}/colleges/compare?ids=ID1,ID2" }
+        },
+        {
+          "name": "Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/colleges/recommendations"
+          }
+        },
+        {
+          "name": "Create College (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/colleges",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New College\",\n  \"location\": \"City, State\",\n  \"city\": \"City\",\n  \"state\": \"State\",\n  \"stream\": \"Engineering\",\n  \"fees\": 500000,\n  \"type\": \"PRIVATE\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update College (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/colleges/{{collegeId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"rating\": 4.6\n}" }
+          }
+        },
+        {
+          "name": "Delete College (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/colleges/{{collegeId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        { "name": "List Courses", "request": { "method": "GET", "url": "{{baseUrl}}/courses?collegeId={{collegeId}}" } },
+        { "name": "Get Course", "request": { "method": "GET", "url": "{{baseUrl}}/courses/COURSE_ID" } },
+        {
+          "name": "Create Course (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/courses",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collegeId\": \"{{collegeId}}\",\n  \"name\": \"B.Tech CSE\",\n  \"duration\": \"4 Years\",\n  \"fees\": 800000,\n  \"seats\": 120\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exams",
+      "item": [
+        { "name": "List Exams", "request": { "method": "GET", "url": "{{baseUrl}}/exams" } },
+        { "name": "Get Exam", "request": { "method": "GET", "url": "{{baseUrl}}/exams/EXAM_ID_OR_SLUG" } },
+        {
+          "name": "Create Exam (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/exams",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Exam\",\n  \"description\": \"Sample exam\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collegeId\": \"{{collegeId}}\",\n  \"rating\": 5,\n  \"comment\": \"Great college!\"\n}"
+            }
+          }
+        },
+        { "name": "List Reviews by College", "request": { "method": "GET", "url": "{{baseUrl}}/reviews/{{collegeId}}" } },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/reviews/REVIEW_ID"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Saved Colleges",
+      "item": [
+        {
+          "name": "Save College",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/saved",
+            "body": { "mode": "raw", "raw": "{\n  \"collegeId\": \"{{collegeId}}\"\n}" }
+          }
+        },
+        {
+          "name": "Unsave College",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/saved/{{collegeId}}"
+          }
+        },
+        {
+          "name": "List Saved Colleges",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/saved"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Applications",
+      "item": [
+        {
+          "name": "Apply to College",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/applications",
+            "body": { "mode": "raw", "raw": "{\n  \"collegeId\": \"{{collegeId}}\",\n  \"notes\": \"Interested in CSE\"\n}" }
+          }
+        },
+        {
+          "name": "List Applications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/applications"
+          }
+        },
+        {
+          "name": "Update Application",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/applications/APPLICATION_ID",
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"SHORTLISTED\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        { "name": "Global Search", "request": { "method": "GET", "url": "{{baseUrl}}/search?q=engineering" } },
+        { "name": "Popular Searches", "request": { "method": "GET", "url": "{{baseUrl}}/search/popular" } }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/admin/users"
+          }
+        },
+        {
+          "name": "Analytics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/admin/analytics"
+          }
+        },
+        {
+          "name": "List Colleges (admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/admin/colleges"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Upload Image (admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": "{{baseUrl}}/upload/image",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "image", "type": "file", "src": "" }]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

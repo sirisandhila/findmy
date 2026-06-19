@@ -6,7 +6,7 @@
  * request isn't blocked. Prisma auto-connects lazily on the first query if
  * the explicit $connect hasn't resolved yet, so this is safe.
  */
-const app = require("..server");
+const app = require("../src/app");
 const prisma = require("../src/config/db");
 const { connectRedis } = require("../src/config/redis");
 const logger = require("../src/utils/logger");

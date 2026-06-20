@@ -1,21 +1,16 @@
-{
-  "name": "college-kampus-backend",
-  "version": "1.0.0",
-  "description": "Production backend for the CollegeKampus college discovery platform",
-  "main": "api/index.js",
-  "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
-    "build": "prisma generate"
-    "postinstall": "prisma generate",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate deploy",
-    "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:studio": "prisma studio",
-    "seed": "node prisma/seed.js",
-    "lint": "eslint src",
-    "test": "jest --runInBand"
-  },
+"scripts": {
+  "dev": "nodemon server.js",
+  "start": "node server.js",
+  "build": "prisma generate",
+  "postinstall": "prisma generate",
+  "prisma:generate": "prisma generate",
+  "prisma:migrate": "prisma migrate deploy",
+  "prisma:migrate:dev": "prisma migrate dev",
+  "prisma:studio": "prisma studio",
+  "seed": "node prisma/seed.js",
+  "lint": "eslint src",
+  "test": "jest --runInBand"
+}
   "dependencies": {
     "@prisma/client": "^5.20.0",
     "bcryptjs": "^2.4.3",

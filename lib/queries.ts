@@ -38,18 +38,20 @@ featured: r.featured,
 
 export async function getCollegeById(id: number) {
 const result = await db
-.select({
-college: collegesTable,
-details: collegeDetails,
-})
-.from(collegesTable)
-.leftJoin(
-collegeDetails,
-eq(collegesTable.id, collegeDetails.collegeId)
-)
-.where(eq(collegesTable.id, id))
-.limit(1)
+  .select({
+    college: collegesTable,
+    details: collegeDetails,
+  })
+  .from(collegesTable)
+  .leftJoin(
+    collegeDetails,
+    eq(collegesTable.id, collegeDetails.collegeId)
+  )
+  .where(eq(collegesTable.id, id))
+  .limit(1)
 
+console.log("RESULT:")
+console.log(JSON.stringify(result, null, 2))
 if (!result.length) {
 return null
 }

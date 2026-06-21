@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import Image from "next/image"
 import {
   MapPin,
@@ -10,6 +11,7 @@ import {
   Wallet,
   Check,
 } from "lucide-react"
+
 import type { College } from "@/lib/colleges"
 import { RatingBadge } from "@/components/rating-badge"
 import { Button } from "@/components/ui/button"
@@ -40,11 +42,13 @@ export function CollegeCard({
           sizes="(max-width: 640px) 100vw, 224px"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
+
         {college.featured && (
           <span className="absolute left-3 top-3 rounded-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground">
             Featured
           </span>
         )}
+
         <button
           type="button"
           onClick={() => onToggleSave(college.id)}
@@ -55,7 +59,9 @@ export function CollegeCard({
           <Heart
             className={cn(
               "size-4.5 transition-colors",
-              saved ? "fill-destructive text-destructive" : "text-muted-foreground",
+              saved
+                ? "fill-destructive text-destructive"
+                : "text-muted-foreground"
             )}
           />
         </button>
@@ -69,21 +75,26 @@ export function CollegeCard({
               <Badge variant="secondary" className="font-medium">
                 {college.type}
               </Badge>
+
               <span className="inline-flex items-center gap-1 text-xs font-medium text-primary">
                 <Award className="size-3.5" />
                 #{college.ranking} {college.rankingBody}
               </span>
             </div>
+
             <h3 className="text-pretty text-base font-semibold leading-snug text-foreground">
               {college.name}
             </h3>
+
             <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
               <MapPin className="size-3.5 shrink-0" />
               {college.location}
             </p>
           </div>
+
           <div className="flex flex-col items-end gap-1">
             <RatingBadge rating={college.rating} />
+
             <span className="text-xs text-muted-foreground">
               {college.reviews.toLocaleString("en-IN")} reviews
             </span>
@@ -92,11 +103,26 @@ export function CollegeCard({
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 rounded-lg bg-muted/60 p-3">
-          <Stat icon={Wallet} label="Total Fees" value={college.feesLabel} />
-          <Stat icon={BookOpen} label="Courses" value={`${college.courses}+`} />
-          <Stat icon={Award} label="Accredited" value={college.accredited} />
+          <Stat
+            icon={Wallet}
+            label="Total Fees"
+            value={college.feesLabel}
+          />
+
+          <Stat
+            icon={BookOpen}
+            label="Courses"
+            value={`${college.courses}+`}
+          />
+
+          <Stat
+            icon={Award}
+            label="Accredited"
+            value={college.accredited}
+          />
         </div>
 
+        {/* Exams */}
         <div className="flex flex-wrap gap-1.5">
           {college.exams.map((exam) => (
             <span
@@ -110,26 +136,44 @@ export function CollegeCard({
 
         {/* Actions */}
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-1">
-          <Button size="sm" className="flex-1 sm:flex-none">
-            View Details
-          </Button>
+          <Link href={`/college/${college.id}`}>
+            <Button size="sm" className="flex-1 sm:flex-none">
+              View Details
+            </Button>
+          </Link>
+
           <Button
             size="sm"
             variant={compared ? "default" : "outline"}
             onClick={() => onToggleCompare(college.id)}
             aria-pressed={compared}
-            className={cn(compared && "bg-accent-foreground text-primary-foreground hover:bg-accent-foreground/90")}
+            className={cn(
+              compared &&
+                "bg-accent-foreground text-primary-foreground hover:bg-accent-foreground/90"
+            )}
           >
-            {compared ? <Check className="size-4" /> : <GitCompare className="size-4" />}
+            {compared ? (
+              <Check className="size-4" />
+            ) : (
+              <GitCompare className="size-4" />
+            )}
+
             {compared ? "Added" : "Compare"}
           </Button>
+
           <Button
             size="sm"
             variant="ghost"
             onClick={() => onToggleSave(college.id)}
             aria-pressed={saved}
           >
-            <Heart className={cn("size-4", saved && "fill-destructive text-destructive")} />
+            <Heart
+              className={cn(
+                "size-4",
+                saved && "fill-destructive text-destructive"
+              )}
+            />
+
             {saved ? "Saved" : "Save"}
           </Button>
         </div>
@@ -153,7 +197,10 @@ function Stat({
         <Icon className="size-3.5" />
         {label}
       </span>
-      <span className="text-sm font-semibold text-foreground">{value}</span>
+
+      <span className="text-sm font-semibold text-foreground">
+        {value}
+      </span>
     </div>
   )
 }

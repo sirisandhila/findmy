@@ -75,31 +75,31 @@ exams: row.colleges.exams,
 featured: row.colleges.featured,
 
 ```
-details: row.college_details
+details: row.collegeDetails
   ? {
-      description: row.college_details.description,
-      establishedYear: row.college_details.establishedYear,
-      campusSize: row.college_details.campusSize,
+      description: row.collegeDetails.description,
+      establishedYear: row.collegeDetails.establishedYear,
+      campusSize: row.collegeDetails.campusSize,
 
-      nirf2025: row.college_details.nirf2025,
-      nirf2024: row.college_details.nirf2024,
-      nirf2023: row.college_details.nirf2023,
+      nirf2025: row.collegeDetails.nirf2025,
+      nirf2024: row.collegeDetails.nirf2024,
+      nirf2023: row.collegeDetails.nirf2023,
 
-      coursesOffered: row.college_details.coursesOffered,
+      coursesOffered: row.collegeDetails.coursesOffered,
 
-      eligibility: row.college_details.eligibility,
-      admissionProcess: row.college_details.admissionProcess,
+      eligibility: row.collegeDetails.eligibility,
+      admissionProcess: row.collegeDetails.admissionProcess,
 
-      placementRate: row.college_details.placementRate,
-      averagePackage: row.college_details.averagePackage,
-      highestPackage: row.college_details.highestPackage,
+      placementRate: row.collegeDetails.placementRate,
+      averagePackage: row.collegeDetails.averagePackage,
+      highestPackage: row.collegeDetails.highestPackage,
 
-      topRecruiters: row.college_details.topRecruiters,
+      topRecruiters: row.collegeDetails.topRecruiters,
 
-      hostelAvailable: row.college_details.hostelAvailable,
-      hostelFees: row.college_details.hostelFees,
+      hostelAvailable: row.collegeDetails.hostelAvailable,
+      hostelFees: row.collegeDetails.hostelFees,
 
-      website: row.college_details.website,
+      website: row.collegeDetails.website,
     }
   : null,
 ```

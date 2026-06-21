@@ -38,20 +38,18 @@ featured: r.featured,
 
 export async function getCollegeById(id: number) {
 const result = await db
-  .select({
-    college: collegesTable,
-    details: collegeDetails,
-  })
-  .from(collegesTable)
-  .leftJoin(
-    collegeDetails,
-    eq(collegesTable.id, collegeDetails.collegeId)
-  )
-  .where(eq(collegesTable.id, id))
-  .limit(1)
+.select({
+college: collegesTable,
+details: collegeDetails,
+})
+.from(collegesTable)
+.leftJoin(
+collegeDetails,
+eq(collegesTable.id, collegeDetails.collegeId)
+)
+.where(eq(collegesTable.id, id))
+.limit(1)
 
-console.log("RESULT:")
-console.log(JSON.stringify(result, null, 2))
 if (!result.length) {
 return null
 }
@@ -95,13 +93,22 @@ details: row.details
       eligibility: row.details.eligibility,
       admissionProcess: row.details.admissionProcess,
 
-      placementRate: row.details.placementRate,
-      averagePackage: row.details.averagePackage,
-      highestPackage: row.details.highestPackage,
+      placementRate: row.details.placementRate
+        ? Number(row.details.placementRate)
+        : null,
+
+      averagePackage: row.details.averagePackage
+        ? Number(row.details.averagePackage)
+        : null,
+
+      highestPackage: row.details.highestPackage
+        ? Number(row.details.highestPackage)
+        : null,
 
       topRecruiters: row.details.topRecruiters,
 
       hostelAvailable: row.details.hostelAvailable,
+
       hostelFees: row.details.hostelFees,
 
       website: row.details.website,
@@ -111,4 +118,3 @@ details: row.details
 
 }
 }
-

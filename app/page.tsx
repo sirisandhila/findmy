@@ -4,6 +4,7 @@ import { getColleges } from "@/lib/queries"
 
 export default async function Page() {
   const colleges = await getColleges()
+  export const dynamic = "force-dynamic";
 
   return (
     <div className="min-h-screen bg-background">

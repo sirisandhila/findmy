@@ -38,7 +38,10 @@ featured: r.featured,
 
 export async function getCollegeById(id: number) {
 const result = await db
-.select()
+.select({
+college: collegesTable,
+details: collegeDetails,
+})
 .from(collegesTable)
 .leftJoin(
 collegeDetails,
@@ -46,8 +49,7 @@ eq(collegesTable.id, collegeDetails.collegeId)
 )
 .where(eq(collegesTable.id, id))
 .limit(1)
-console.log(JSON.stringify(result, null, 2))
-  
+
 if (!result.length) {
 return null
 }
@@ -55,55 +57,56 @@ return null
 const row = result[0]
 
 return {
-id: String(row.colleges.id),
-name: row.colleges.name,
-shortName: row.colleges.shortName,
-location: row.colleges.location,
-city: row.colleges.city,
-state: row.colleges.state,
-image: row.colleges.image,
-rating: row.colleges.rating,
-reviews: row.colleges.reviews,
-fees: row.colleges.fees,
-feesLabel: row.colleges.feesLabel,
-stream: row.colleges.stream,
-type: row.colleges.type,
-ranking: row.colleges.ranking,
-rankingBody: row.colleges.rankingBody,
-courses: row.colleges.courses,
-accredited: row.colleges.accredited,
-exams: row.colleges.exams,
-featured: row.colleges.featured,
+id: String(row.college.id),
+name: row.college.name,
+shortName: row.college.shortName,
+location: row.college.location,
+city: row.college.city,
+state: row.college.state,
+image: row.college.image,
+rating: row.college.rating,
+reviews: row.college.reviews,
+fees: row.college.fees,
+feesLabel: row.college.feesLabel,
+stream: row.college.stream,
+type: row.college.type,
+ranking: row.college.ranking,
+rankingBody: row.college.rankingBody,
+courses: row.college.courses,
+accredited: row.college.accredited,
+exams: row.college.exams,
+featured: row.college.featured,
 
 ```
-details: row.collegeDetails
+details: row.details
   ? {
-      description: row.collegeDetails.description,
-      establishedYear: row.collegeDetails.establishedYear,
-      campusSize: row.collegeDetails.campusSize,
+      description: row.details.description,
+      establishedYear: row.details.establishedYear,
+      campusSize: row.details.campusSize,
 
-      nirf2025: row.collegeDetails.nirf2025,
-      nirf2024: row.collegeDetails.nirf2024,
-      nirf2023: row.collegeDetails.nirf2023,
+      nirf2025: row.details.nirf2025,
+      nirf2024: row.details.nirf2024,
+      nirf2023: row.details.nirf2023,
 
-      coursesOffered: row.collegeDetails.coursesOffered,
+      coursesOffered: row.details.coursesOffered,
 
-      eligibility: row.collegeDetails.eligibility,
-      admissionProcess: row.collegeDetails.admissionProcess,
+      eligibility: row.details.eligibility,
+      admissionProcess: row.details.admissionProcess,
 
-      placementRate: row.collegeDetails.placementRate,
-      averagePackage: row.collegeDetails.averagePackage,
-      highestPackage: row.collegeDetails.highestPackage,
+      placementRate: row.details.placementRate,
+      averagePackage: row.details.averagePackage,
+      highestPackage: row.details.highestPackage,
 
-      topRecruiters: row.collegeDetails.topRecruiters,
+      topRecruiters: row.details.topRecruiters,
 
-      hostelAvailable: row.collegeDetails.hostelAvailable,
-      hostelFees: row.collegeDetails.hostelFees,
+      hostelAvailable: row.details.hostelAvailable,
+      hostelFees: row.details.hostelFees,
 
-      website: row.collegeDetails.website,
+      website: row.details.website,
     }
   : null,
 ```
 
 }
 }
+

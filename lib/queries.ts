@@ -32,14 +32,18 @@ export async function getColleges(): Promise<College[]> {
   }))
 }
 
-export async function getCollegeById(id: number) {
+export async function getCollegeById(
+  id: number
+): Promise<College | null> {
   const rows = await db
     .select()
     .from(collegesTable)
     .where(eq(collegesTable.id, id))
     .limit(1)
 
-  if (!rows.length) return null
+  if (rows.length === 0) {
+    return null
+  }
 
   const r = rows[0]
 
@@ -56,7 +60,7 @@ export async function getCollegeById(id: number) {
     fees: r.fees,
     feesLabel: r.feesLabel,
     stream: r.stream,
-    type: r.type,
+    type: r.type as College["type"],
     ranking: r.ranking,
     rankingBody: r.rankingBody,
     courses: r.courses,

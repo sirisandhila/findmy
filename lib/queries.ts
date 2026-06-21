@@ -46,7 +46,8 @@ eq(collegesTable.id, collegeDetails.collegeId)
 )
 .where(eq(collegesTable.id, id))
 .limit(1)
-
+console.log(JSON.stringify(result, null, 2))
+  
 if (!result.length) {
 return null
 }

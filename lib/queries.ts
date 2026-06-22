@@ -77,7 +77,6 @@ accredited: row.college.accredited,
 exams: row.college.exams,
 featured: row.college.featured,
 
-```
 details: row.details
   ? {
       description: row.details.description,
@@ -114,7 +113,6 @@ details: row.details
       website: row.details.website,
     }
   : null,
-```
 
 }
 }

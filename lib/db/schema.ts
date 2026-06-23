@@ -81,5 +81,24 @@ export const collegeDetails = pgTable("college_details", {
   website: text("website"),
 })
 
+/* =========================
+   CAMPUS GALLERY TABLE
+========================= */
+
+export const collegeGallery = pgTable("college_gallery", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+
+  collegeId: integer("college_id")
+    .notNull()
+    .references(() => colleges.id),
+
+  imageUrl: text("image_url").notNull(),
+})
+
 export type CollegeRow = typeof colleges.$inferSelect
-export type CollegeDetailsRow = typeof collegeDetails.$inferSelect
+
+export type CollegeDetailsRow =
+  typeof collegeDetails.$inferSelect
+
+export type CollegeGalleryRow =
+  typeof collegeGallery.$inferSelect

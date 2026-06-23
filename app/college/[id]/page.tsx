@@ -72,57 +72,88 @@ twitter: {
 }
 
 export default async function CollegePage({
-params,
+  params,
 }: PageProps) {
-const { id } = await params
+  const { id } = await params
 
-const college = await getCollegeById(Number(id))
+  const college = await getCollegeById(Number(id))
 
-if (!college) {
-notFound()
-}
+  if (!college) {
+    notFound()
+  }
 
-const details = college.details
+  const details = college.details
 
-const structuredData = {
-"@context": "https://schema.org",
-"@type": "CollegeOrUniversity",
-name: college.name,
-image: college.image,
-address: {
-"@type": "PostalAddress",
-addressLocality: college.city,
-addressRegion: college.state,
-addressCountry: "India",
-},
-url: details?.website || "",
-description: details?.description || "",
-}
+  const gallery = await getCollegeGallery(Number(id))
 
-return ( <main className="min-h-screen bg-background">
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollegeOrUniversity",
+    name: college.name,
+    image: college.image,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: college.city,
+      addressRegion: college.state,
+      addressCountry: "India",
+    },
+    url: details?.website || "",
+    description: details?.description || "",
+  }
 
+  return (
+    <main className="min-h-screen bg-background">
 
-  <script
-    type="application/ld+json"
-    dangerouslySetInnerHTML={{
-      __html: JSON.stringify(structuredData),
-    }}
-  />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
 
-  {/* Hero Image */}
-  <div className="relative h-[450px] w-full">
-    <Image
-      src={college.image || "/placeholder.svg"}
-      alt={college.name}
-      fill
-      priority
-      className="object-cover"
-    />
-  </div>
+      {/* Hero Image */}
+      <div className="relative h-[450px] w-full">
+        <Image
+          src={college.image || "/placeholder.svg"}
+          alt={college.name}
+          fill
+          priority
+          className="object-cover"
+        />
+      </div>
 
-  {/* KEEP THE REST OF YOUR EXISTING PAGE CODE BELOW */}
-</main>
+      <div className="mx-auto max-w-7xl px-4 py-8">
 
+        {/* YOUR EXISTING SECTIONS HERE */}
 
-)
+        {/* Campus Gallery */}
+        <section className="mb-10">
+          <h2 className="mb-4 text-2xl font-semibold">
+            Campus Gallery
+          </h2>
+
+          {gallery.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-3">
+              {gallery.map((img) => (
+                <div
+                  key={img.id}
+                  className="relative h-64 overflow-hidden rounded-xl"
+                >
+                  <Image
+                    src={img.imageUrl}
+                    alt={`${college.name} Campus`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No gallery images available.</p>
+          )}
+        </section>
+
+      </div>
+    </main>
+  )
 }

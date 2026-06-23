@@ -38,7 +38,9 @@ export const colleges = pgTable("colleges", {
 
   exams: text("exams").array().notNull(),
 
-  featured: boolean("featured").notNull().default(false),
+  featured: boolean("featured")
+    .notNull()
+    .default(false),
 
   createdAt: timestamp("created_at")
     .notNull()
@@ -88,12 +90,15 @@ export const collegeGallery = pgTable("college_gallery", {
 
   collegeId: integer("college_id")
     .notNull()
-    .references(() => colleges.id),
+    .references(() => colleges.id, {
+      onDelete: "cascade",
+    }),
 
   imageUrl: text("image_url").notNull(),
 })
 
-export type CollegeRow = typeof colleges.$inferSelect
+export type CollegeRow =
+  typeof colleges.$inferSelect
 
 export type CollegeDetailsRow =
   typeof collegeDetails.$inferSelect

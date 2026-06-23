@@ -81,12 +81,10 @@ export const collegeDetails = pgTable("college_details", {
   website: text("website"),
 })
 
-/* =========================
-   CAMPUS GALLERY TABLE
-========================= */
-
 export const collegeGallery = pgTable("college_gallery", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  id: integer("id")
+    .primaryKey()
+    .generatedAlwaysAsIdentity(),
 
   collegeId: integer("college_id")
     .notNull()
